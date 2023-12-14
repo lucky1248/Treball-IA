@@ -1,12 +1,47 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Web</title>
+    <title id="pageLabel">Qui és com jo?</title>
+    <!-- Puedes vincular un archivo CSS para aplicar estilos -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Hola, Mundo!</h1>
-    <!-- Aquí puedes agregar tu formulario y otros elementos de interfaz de usuario -->
+    <h1 id="textIntroduceDataLabel">Introdueix les teves dades:</h1>
+    <form id="userForm">
+        <label for="location" id="locationLabel">Ubicació:</label>
+        <input type="text" id="location" name="location" required>
+
+        <label for="age" id="ageLabel">Edat:</label>
+        <input type="number" id="age" name="age" required>
+
+        <label for="gender" id="genderLabel">Génere:</label>
+        <select id="gender" name="gender" required>
+            <option value="male" id="menLabel">Home</option>
+            <option value="female" id="womenLabel">Dona</option>
+        </select>
+
+        <label for="gender" id="educationLabel">Nivell Educatiu:</label>
+        <select id="education" name="education" required>
+            <option value="male" id="lLabel">L</option>
+            <option value="female" id="wLabel">W</option>
+        </select>
+
+        <button type="button" id="sendFormLabel" onclick="submitForm()">Enviar</button>
+    </form>
+
+    
+    <div>
+        <button id="spanishLabel" onclick="changeLanguage('es')">Español</button>
+        <button id="catalanLabel" onclick="changeLanguage('ca')">Català</button>
+    </div> 
+    
+
+
+    <!-- Puedes vincular un archivo JavaScript para agregar interactividad -->
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+
 </body>
 </html>

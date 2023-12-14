@@ -1,0 +1,13 @@
+{
+    "pageLabel" : "¿Quien es como yo?",
+    "textIntroduceDataLabel" : "Introduce tus datos:",
+    "locationLabel" : "Ubicación:",
+    "ageLabel" : "Edad:",
+    "genderLabel" : "Género:",
+    "menLabel" : "Hombre",
+    "womenLabel" : "Mujer",
+    "educationLabel" : "Nivel Educativo:",
+    "lLabel" : "L",
+    "wLabel" : "W",
+    "sendFormLabel" : "Enviar"    
+}

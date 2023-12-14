@@ -1,0 +1,13 @@
+{
+    "pageLabel" : "Qui és com jo?",
+    "textIntroduceDataLabel" : "Introdueix les teves dades:",
+    "locationLabel" : "Ubicació:",
+    "ageLabel" : "Edat:",
+    "genderLabel" : "Génere:",
+    "menLabel" : "Home",
+    "womenLabel" : "Dona",
+    "educationLabel" : "Nivell Educatiu:",
+    "lLabel" : "L",
+    "wLabel" : "W",
+    "sendFormLabel" : "Enviar"
+}
