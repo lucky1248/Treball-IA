@@ -1,6 +1,6 @@
 from flask import Flask, render_template, send_from_directory
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 
 # Ruta para servir archivos JSON de traducción
 @app.route('/translations/<lang>.json')

@@ -3,11 +3,14 @@
     "textIntroduceDataLabel" : "Introdueix les teves dades:",
     "locationLabel" : "Ubicació:",
     "ageLabel" : "Edat:",
-    "genderLabel" : "Génere:",
+    "sexLabel" : "Sexe:",
     "menLabel" : "Home",
     "womenLabel" : "Dona",
     "educationLabel" : "Nivell Educatiu:",
-    "lLabel" : "L",
-    "wLabel" : "W",
+    "education1Label" : "Sense estudis",
+    "education2Label" : "Estudis primaris, certificat d'escolaritat, EGB",
+    "education3Label" : "Batxillerat elemental, graduat escolar, ESO, FPI",
+    "education4Label" : "Batxillerat superior, BUP, COU, FPII, CFGM grau mitjà",
+    "education5Label" : "Estudis universitaris, CFGS grau superior",
     "sendFormLabel" : "Enviar"
 }

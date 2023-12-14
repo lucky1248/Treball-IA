@@ -6,28 +6,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageLabel">Qui és com jo?</title>
     <!-- Puedes vincular un archivo CSS para aplicar estilos -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h1 id="textIntroduceDataLabel">Introdueix les teves dades:</h1>
     <form id="userForm">
+
+        <label for="sex" id="sexLabel">Sexe:</label>
+        <select id="sex" name="sex" onchange="submitSexForm()">
+            <option value=0 id="noLabel"></option>
+            <option value=1 id="womenLabel">Dona</option>
+            <option value=2 id="menLabel">Home</option>
+        </select>
+
+    <!-- Útil per calcular SEXE -->      
+
         <label for="location" id="locationLabel">Ubicació:</label>
         <input type="text" id="location" name="location" required>
 
+    <!-- LLOC_NAIX, LLOC_NAIX_CCAA, LLOC_NAIX_REGIO, NACIONALITAT_G, NACIONALITAT_REGIO -->      
+
         <label for="age" id="ageLabel">Edat:</label>
         <input type="number" id="age" name="age" required>
+       
+    <!-- Útil per calcular EDAT_1, EDAT_Q, EDAT_G, DECADA -->
 
-        <label for="gender" id="genderLabel">Génere:</label>
-        <select id="gender" name="gender" required>
-            <option value="male" id="menLabel">Home</option>
-            <option value="female" id="womenLabel">Dona</option>
+        <label for="education" id="educationLabel">Nivell Educatiu:</label>
+        <select id="education" name="education" onchange="submitEducationForm()">
+            <option value=0 id="noLabel"></option>
+            <option value=1 id="education1Label">Sense estudis</option>
+            <option value=2 id="education2Label">Estudis primaris, certificat d'escolaritat, EGB</option>
+            <option value=3 id="education3Label">Batxillerat elemental, graduat escolar, ESO, FPI</option>
+            <option value=4 id="education4Label">Batxillerat superior, BUP, COU, FPII, CFGM grau mitjà</option>
+            <option value=5 id="education5Label">Estudis universitaris, CFGS grau superior</option>
         </select>
 
-        <label for="gender" id="educationLabel">Nivell Educatiu:</label>
-        <select id="education" name="education" required>
-            <option value="male" id="lLabel">L</option>
-            <option value="female" id="wLabel">W</option>
-        </select>
+    <!-- Útil per calcular NIV_EDUCA_esta -->
 
         <button type="button" id="sendFormLabel" onclick="submitForm()">Enviar</button>
     </form>
@@ -38,7 +52,6 @@
         <button id="catalanLabel" onclick="changeLanguage('ca')">Català</button>
     </div> 
     
-
 
     <!-- Puedes vincular un archivo JavaScript para agregar interactividad -->
     <script src="{{ url_for('static', filename='main.js') }}"></script>

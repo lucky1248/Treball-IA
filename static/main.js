@@ -1,18 +1,4 @@
-function submitForm() {
-    // Obtén los valores del formulario
-    const location = document.getElementById('location').value;
-    const age = document.getElementById('age').value;
-    const gender = document.getElementById('gender').value;
-    const education = document.getElementById('education').value;
-
-    // Realiza acciones con los datos (puedes enviarlos al servidor, realizar cálculos, etc.)
-    console.log('Ubicación:', location);
-    console.log('Edad:', age);
-    console.log('Género:', gender);
-    console.log('Nivel Educativo:', education);
-
-    // Aquí puedes realizar más acciones según tus necesidades
-}
+const dataInstance = new Data();
 
 document.addEventListener('DOMContentLoaded', function() {
     // Inicializa el idioma predeterminado al cargar la página
@@ -24,7 +10,6 @@ async function changeLanguage(lang){
     try {
         // Carga las traducciones
         const traductions = await cargarTraductions(lang);
-        console.log('Traductions:', traductions);
 
         // Itera sobre las claves del objeto de traducciones
         for (const key in traductions) {
@@ -53,4 +38,12 @@ function cargarTraductions(lang) {
             console.error(`Error al cargar las traducciones para ${lang}:`, error);
             return {}; // Devolver un objeto vacío en caso de error
         });
-    }
+}
+
+function submitSexForm() {
+    dataInstance.changeSexValue(document.getElementById('sex').value);
+}
+
+function submitEducationForm() {
+    dataInstance.changEducationValue(document.getElementById('education').value);
+}

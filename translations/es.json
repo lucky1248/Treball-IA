@@ -3,11 +3,14 @@
     "textIntroduceDataLabel" : "Introduce tus datos:",
     "locationLabel" : "Ubicación:",
     "ageLabel" : "Edad:",
-    "genderLabel" : "Género:",
+    "sexLabel" : "Sexo:",
     "menLabel" : "Hombre",
     "womenLabel" : "Mujer",
     "educationLabel" : "Nivel Educativo:",
-    "lLabel" : "L",
-    "wLabel" : "W",
+    "education1Label" : "Sin estudios",
+    "education2Label" : "Estudios primarios, certificado de escolaridad, EGB",
+    "education3Label" : "Bachillerato elemental, graduado escolar, ESO, FPI",
+    "education4Label" : "Bachillerato superior, BUP, COU, FPII, CFGM grado medio",
+    "education5Label" : "Estudios universitarios, CFGS grado superior",
     "sendFormLabel" : "Enviar"    
 }
