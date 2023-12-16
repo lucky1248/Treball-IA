@@ -48,7 +48,6 @@
             </select>
         </div>
 
-
     <!-- Útil per calcular CODI_DISTRICTE_DEST, CODI_BARRI_DEST -->      
 
         <label for="education" id="educationLabel">Nivell Educatiu:</label>
@@ -64,15 +63,12 @@
     <!-- Útil per calcular NIV_EDUCA_esta -->
     </form>
 
-    
     <div>
         <button id="spanishLabel" onclick="changeLanguage('es')">Español</button>
         <button id="catalanLabel" onclick="changeLanguage('ca')">Català</button>
     </div> 
-    
 
-    <!-- Puedes vincular un archivo JavaScript para agregar interactividad -->
-    <script type="module" src="{{ url_for('static', filename='main.js') }}"></script>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
 
 </body>
 </html>

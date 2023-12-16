@@ -1,4 +1,4 @@
-export default class Data{
+class Data{
     constructor() {
         this.SEXE = null;
         this.EDAT_1 = null;
