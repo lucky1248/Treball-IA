@@ -1,7 +1,8 @@
 {
     "pageLabel" : "Qui és com jo?",
     "textIntroduceDataLabel" : "Introdueix les teves dades:",
-    "locationLabel" : "Ubicació:",
+    "districtLabel" : "Districte de residència:",
+    "neighborhoodLabel" : "Barri de residència",
     "ageLabel" : "Edat:",
     "sexLabel" : "Sexe:",
     "menLabel" : "Home",

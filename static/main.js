@@ -1,7 +1,9 @@
-const dataInstance = new Data();
+import Data from './Data';
+let dataInstance;
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Inicializa el idioma predeterminado al cargar la página
+    // Inicializa el idioma predeterminado al cargar la página y el dataInstance
+    dataInstance = new Data();
     const defaultLanguage = 'ca';
     changeLanguage(defaultLanguage);
 });
@@ -45,5 +47,54 @@ function submitSexForm() {
 }
 
 function submitEducationForm() {
-    dataInstance.changEducationValue(document.getElementById('education').value);
+    dataInstance.changeEducationValue(document.getElementById('education').value);
+}
+
+function submitAgeForm() {
+    dataInstance.changeAgeValue(document.getElementById('age').value);
+}
+
+function submitDistrictForm() {
+    dataInstance.changeDistrictValue(document.getElementById('district').value);
+    /*var selectedDistrict = document.getElementById("district").value;
+
+    // Obtener el div del segundo desplegable
+    var barrioDiv = document.getElementById("barrioDiv");
+
+    // Limpiar el desplegable de barrios
+    document.getElementById("neighborhood").innerHTML = "";
+
+    // Mostrar el div del segundo desplegable si se ha seleccionado un distrito válido
+    if (selectedDistrict !== "0") {
+        barrioDiv.style.display = "block";
+
+        // Llenar el desplegable de barrios según el distrito seleccionado
+        fillNeighborhoodOptions(selectedDistrict);
+    } else {
+        // Ocultar el div del segundo desplegable si no se ha seleccionado un distrito válido
+        barrioDiv.style.display = "none";
+    }
+}
+
+function fillNeighborhoodOptions(district) {
+    // Aquí debes agregar lógica para llenar las opciones de barrios según el distrito
+    // Puedes usar un switch o if-else para manejar cada distrito
+
+    var neighborhoodSelect = document.getElementById("neighborhood");
+
+    // Ejemplo: llenar opciones para Ciutat Vella
+    if (district === "1") {
+        var neighborhoods = ["Barrio1", "Barrio2", "Barrio3"];
+        neighborhoods.forEach(function (neighborhood, index) {
+            var option = document.createElement("option");
+            option.value = index + 1;
+            option.text = neighborhood;
+            neighborhoodSelect.add(option);
+        });
+    }
+    // Agrega lógica similar para los demás distritos*/
+}
+
+function submitNeighborhoodForm(){
+    dataInstance.changeNeighborhoodValue(document.getElementById('neighborhood').value);
 }

@@ -1,7 +1,8 @@
 {
     "pageLabel" : "¿Quien es como yo?",
     "textIntroduceDataLabel" : "Introduce tus datos:",
-    "locationLabel" : "Ubicación:",
+    "districtLabel" : "Distrito de residencia:",
+    "neighborhoodLabel" : "Barrio de residencia",
     "ageLabel" : "Edad:",
     "sexLabel" : "Sexo:",
     "menLabel" : "Hombre",

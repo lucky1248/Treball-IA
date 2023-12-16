@@ -21,15 +21,35 @@
 
     <!-- Útil per calcular SEXE -->      
 
-        <label for="location" id="locationLabel">Ubicació:</label>
-        <input type="text" id="location" name="location" required>
-
-    <!-- LLOC_NAIX, LLOC_NAIX_CCAA, LLOC_NAIX_REGIO, NACIONALITAT_G, NACIONALITAT_REGIO -->      
-
         <label for="age" id="ageLabel">Edat:</label>
-        <input type="number" id="age" name="age" required>
-       
+        <input type="number" id="age" name="age"  onchange="submitAgeForm()">
+    
     <!-- Útil per calcular EDAT_1, EDAT_Q, EDAT_G, DECADA -->
+
+        <label for="district" id="districtLabel">Districte de residència:</label>
+        <select id="district" name="district" onchange="submitDistrictForm()">
+            <option value=0 id="noLabel"></option>
+            <option value=1 id="district1Label">Ciutat Vella</option>
+            <option value=2 id="district2Label">Eixample</option>
+            <option value=3 id="district3Label">Sants - Montjuïc</option>
+            <option value=4 id="district4Label">Les Corts</option>
+            <option value=5 id="district5Label">Sarrià - Sant Gervasi</option>
+            <option value=6 id="district6Label">Gràcia</option>
+            <option value=7 id="district7Label">Horta - Guinardó</option>
+            <option value=8 id="district8Label">Nou Barris</option>
+            <option value=9 id="district9Label">Sant Andreu</option>
+            <option value=10 id="district10Label">Sant Martí</option>            
+        </select>
+
+        <div id="subcategoryNeighborhoodContainer" style="display: none;">
+            <label for="neighborhood" id="neighborhoodLabel">Barri de residència:</label>
+            <select id="neighborhood" name="neighborhood" onchange="submitNeighborhoodForm()">   
+            <!-- Es va omplint de manera dinàmica -->
+            </select>
+        </div>
+
+
+    <!-- Útil per calcular CODI_DISTRICTE_DEST, CODI_BARRI_DEST -->      
 
         <label for="education" id="educationLabel">Nivell Educatiu:</label>
         <select id="education" name="education" onchange="submitEducationForm()">
@@ -42,8 +62,6 @@
         </select>
 
     <!-- Útil per calcular NIV_EDUCA_esta -->
-
-        <button type="button" id="sendFormLabel" onclick="submitForm()">Enviar</button>
     </form>
 
     
@@ -54,7 +72,7 @@
     
 
     <!-- Puedes vincular un archivo JavaScript para agregar interactividad -->
-    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='main.js') }}"></script>
 
 </body>
 </html>
