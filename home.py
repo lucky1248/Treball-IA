@@ -21,10 +21,11 @@ sex_options = [
     (0, translations.translate('select')),
     (1, translations.translate('female')),
     (2, translations.translate('male'))]
-sex = st.selectbox(translations.translate('sex'), sex_options, format_func=lambda x: x[1])
+SEXE = st.selectbox(translations.translate('sex'), sex_options, format_func=lambda x: x[1])
 
 # Age selection
-age = st.slider(translations.translate('age'), 0, 100, value = 0, step = 1)
+EDAT_1 = st.slider(translations.translate('age'), 0, 100, value = 0, step = 1)
+EDAT_Q = EDAT_1 // 5
 
 # Location selection
 district_options = [
@@ -39,7 +40,7 @@ district_options = [
     (8, 'Nou Barris'),
     (9, 'Sant Andreu'),
     (10, 'Sant Martí')]
-district = st.selectbox(translations.translate('district'), district_options, format_func=lambda x: x[1])
+CODI_DISTRICTE_DEST = st.selectbox(translations.translate('district'), district_options, format_func=lambda x: x[1])
 
 neighborhood_options = {
     1: [(0, translations.translate('select')), (1, 'el Raval'), (2, 'el Barri Gòtic'), (3, 'la Barceloneta'), (4, 'Sant Pere, Santa Caterina i la Ribera')],
@@ -52,11 +53,21 @@ neighborhood_options = {
     8: [(0, translations.translate('select')), (44, 'Vilapicina i la Torre Llobeta'), (45, 'Porta'), (46, 'el Turó de la Peira'), (47, 'Can Peguera'), (48, 'la Guineueta'), (50, 'les Roquetes'), (51, 'Verdun'), (52, 'la Prosperitat'), (53, 'la Trinitat Nova'), (54, 'Torre Baró'), (55, 'Ciutat Meridiana'), (56, 'Vallbona')],
     9: [(0, translations.translate('select')), (57, 'la Trinitat Vella'), (58, 'Baró de Viver'), (59, 'el Bon Pastor'), (60, 'Sant Andreu'), (61, 'la Sagrera'), (62, 'el Congrés i els Indians'), (63, 'Navas')],
     10: [(0, translations.translate('select')), (64, 'el Camp de l Arpa del Clot'), (65, 'el Clot'), (66, 'el Parc i la Llacuna del Poblenou'), (67, 'la Vila Olímpica del Poblenou'), (68, 'el Poblenou'), (69, 'Diagonal Mar i el Front Marítim del Poblenou'), (70, 'el Besòs i el Maresme'), (71, 'Provençals del Poblenou'), (72, 'Sant Martí de Provençals'), (73, 'la Verneda i la Pau')]}
-if district[0] > 0:
-    filtered_neighborhood_options = neighborhood_options[district[0]]
+if CODI_DISTRICTE_DEST[0] > 0:
+    filtered_neighborhood_options = neighborhood_options[CODI_DISTRICTE_DEST[0]]
 else:
     filtered_neighborhood_options = []
-neighborhood = st.selectbox(translations.translate('neighborhood'), filtered_neighborhood_options, format_func=lambda x: x[1])
+CODI_BARRI_DEST = st.selectbox(translations.translate('neighborhood'), filtered_neighborhood_options, format_func=lambda x: x[1])
+
+# Place of Birth selection
+place_birth_options = [
+    (0, translations.translate('select')),
+    (1, translations.translate('place_birth_1')),
+    (2, translations.translate('place_birth_2')),
+    (3, translations.translate('place_birth_3')),
+    (4, translations.translate('place_birth_4')),
+    (5, translations.translate('place_birth_5'))]
+LLOC_NAIX = st.selectbox(translations.translate('place_birth'), place_birth_options, format_func=lambda x: x[1])
 
 # Education level selection
 education_options = [
@@ -66,4 +77,4 @@ education_options = [
     (3, translations.translate('education_3')),
     (4, translations.translate('education_4')),
     (5, translations.translate('education_5'))]
-education = st.selectbox(translations.translate('education'), education_options, format_func=lambda x: x[1])
+NIV_EDUCA_esta = st.selectbox(translations.translate('education'), education_options, format_func=lambda x: x[1])

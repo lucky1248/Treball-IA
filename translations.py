@@ -17,7 +17,13 @@ class Translations:
                 'education_2' : 'Estudios primarios, certificado de escolaridad, EGB',
                 'education_3' : 'Bachillerato elemental, graduado escolar, ESO, FPI',
                 'education_4' :'Bachillerato superior, BUP, COU, FPII, CFGM grado medio',
-                'education_5' :'Estudios universitarios, CFGS grado superior'
+                'education_5' :'Estudios universitarios, CFGS grado superior',
+                'place_birth' : 'Lugar de Nacimiento:',
+                'place_birth_1' : 'Barcelona ciudad',
+                'place_birth_2' : 'Resto de Cataluña',
+                'place_birth_3' : 'Resto d España',
+                'place_birth_4' : 'Resto de la Unión Europea',
+                'place_birth_5' : 'Resto del mundo'   
             },
             'Català': {
                 'title': 'Qui és com jo?',           
@@ -33,7 +39,13 @@ class Translations:
                 'education_2' : 'Estudis primaris, certificat d\'escolaritat, EGB',
                 'education_3' : 'Batxillerat elemental, graduat escolar, ESO, FPI',
                 'education_4' :'Batxillerat superior, BUP, COU, FPII, CFGM grau mitjà',
-                'education_5' :'Estudis universitaris, CFGS grau superior'
+                'education_5' :'Estudis universitaris, CFGS grau superior',
+                'place_birth' : 'Lloc de Naixement:',
+                'place_birth_1' : 'Barcelona ciutat',
+                'place_birth_2' : 'Resta de Catalunya',
+                'place_birth_3' : 'Resta d Espanya',
+                'place_birth_4' : 'Resta de la Unió Europea',
+                'place_birth_5' : 'Resta del món'                
             }
         }
         self.idioma = 'Català'
