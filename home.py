@@ -55,9 +55,7 @@ neighborhood_options = {
     10: [(0, translations.translate('select')), (64, 'el Camp de l Arpa del Clot'), (65, 'el Clot'), (66, 'el Parc i la Llacuna del Poblenou'), (67, 'la Vila Olímpica del Poblenou'), (68, 'el Poblenou'), (69, 'Diagonal Mar i el Front Marítim del Poblenou'), (70, 'el Besòs i el Maresme'), (71, 'Provençals del Poblenou'), (72, 'Sant Martí de Provençals'), (73, 'la Verneda i la Pau')]}
 if CODI_DISTRICTE_DEST[0] > 0:
     filtered_neighborhood_options = neighborhood_options[CODI_DISTRICTE_DEST[0]]
-else:
-    filtered_neighborhood_options = []
-CODI_BARRI_DEST = st.selectbox(translations.translate('neighborhood'), filtered_neighborhood_options, format_func=lambda x: x[1])
+    CODI_BARRI_DEST = st.selectbox(translations.translate('neighborhood'), filtered_neighborhood_options, format_func=lambda x: x[1])
 
 # Place of Birth selection
 place_birth_options = [
@@ -68,6 +66,27 @@ place_birth_options = [
     (4, translations.translate('place_birth_4')),
     (5, translations.translate('place_birth_5'))]
 LLOC_NAIX = st.selectbox(translations.translate('place_birth'), place_birth_options, format_func=lambda x: x[1])
+
+place_birth_advanced_options = {
+    3: [(0, translations.translate('select')), (1, 'Andalusia'), (2, 'Aragó'), (3, 'Principat d Astúries'), (4, 'Illes Balears'), (5, 'Canàries'), (6, 'Cantàbria'), (7, 'Castella i Lleò'), (8, 'Castella - la Manxa'), (9, 'Catalunya'), (10, 'Comunitat Valenciana'), (11, 'Extremadura'), (12, 'Galícia'), (13, 'Comunitat de Madrid'), (14, 'Regió de Murcia'), (15, 'Comunitat Foral de Navarra'), (16, 'País Basc'), (17, 'La Rioja'), (18, 'Ceuta'), (19, 'Melilla')],
+    5: [(0, translations.translate('select')), (1, 'Àfrica'), (2, 'Amèrica'), (3, 'Àsia'), (4, 'Europa'), (5, 'Oceania')]}
+if LLOC_NAIX[0] == 1:
+    LLOC_NAIX_CCAA = (9, 'Catalunya')
+    LLOC_NAIX_CONTINENT= (4, 'Europa')
+elif LLOC_NAIX[0] == 2:
+    LLOC_NAIX_CCAA = (9, 'Catalunya')
+    LLOC_NAIX_CONTINENT = (4, 'Europa')
+elif LLOC_NAIX[0] == 3:
+    filtered_place_birth_advanced_options = place_birth_advanced_options[LLOC_NAIX[0]]
+    LLOC_NAIX_CCAA = st.selectbox(translations.translate('lloc_naix_ccaa'), filtered_place_birth_advanced_options, format_func=lambda x: x[1])
+    LLOC_NAIX_CONTINENT = (4, 'Europa')
+elif LLOC_NAIX[0] == 4:
+    LLOC_NAIX_CCAA = 0
+    LLOC_NAIX_CONTINENT = (4, 'Europa')
+elif LLOC_NAIX[0] == 5:
+    LLOC_NAIX_CCAA = 0
+    filtered_place_birth_advanced_options = place_birth_advanced_options[LLOC_NAIX[0]]
+    LLOC_NAIX_CONTINENT = st.selectbox(translations.translate('lloc_naix_continent'), filtered_place_birth_advanced_options, format_func=lambda x: x[1])
 
 # Education level selection
 education_options = [

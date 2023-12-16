@@ -23,7 +23,9 @@ class Translations:
                 'place_birth_2' : 'Resto de Cataluña',
                 'place_birth_3' : 'Resto d España',
                 'place_birth_4' : 'Resto de la Unión Europea',
-                'place_birth_5' : 'Resto del mundo'   
+                'place_birth_5' : 'Resto del mundo',    
+                'lloc_naix_ccaa' : 'Comunidad Autónoma de Nacimiento:',
+                'lloc_naix_continent' : 'Continente de Nacimiento:'      
             },
             'Català': {
                 'title': 'Qui és com jo?',           
@@ -45,7 +47,9 @@ class Translations:
                 'place_birth_2' : 'Resta de Catalunya',
                 'place_birth_3' : 'Resta d Espanya',
                 'place_birth_4' : 'Resta de la Unió Europea',
-                'place_birth_5' : 'Resta del món'                
+                'place_birth_5' : 'Resta del món',    
+                'lloc_naix_ccaa' : 'Comunitat Autònoma de Naixement:',
+                'lloc_naix_continent' : 'Continent de Naixement:'            
             }
         }
         self.idioma = 'Català'
