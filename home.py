@@ -7,7 +7,12 @@ import geocoder
 import seaborn as sns
 
 # Load data
-df = analysis.load_data('datasets/2023_pad_mdba_sexe_edat-1.csv')
+df_1 = analysis.load_data('datasets/2023_pad_mdba_sexe_edat-1.csv')
+df_2 = analysis.load_data('datasets/2023_pad_mdb_lloc-naix_edat-q_sexe.csv')
+df_3 = analysis.load_data('datasets/2023_pad_mdbas_lloc-naix-ccaa_sexe.csv')
+df_4 = analysis.load_data('datasets/2023_pad_mdb_lloc-naix-continent_edat-q_sexe.csv')
+df_5 = analysis.load_data('datasets/2023_pad_mdb_niv-educa-esta_edat-q_sexe.csv')
+
 
 # Language buttons
 col1, col2 = st.columns(2)
@@ -34,10 +39,23 @@ with tab1:
         (1, translations.translate('female')),
         (2, translations.translate('male'))]
     SEXE = st.selectbox(translations.translate('sex'), sex_options, format_func=lambda x: x[1])
+    
+    if(SEXE[0] != 0):
+        (percentage_sex, number_sex) =  analysis.calculate_similarity_percentage_sex(df_1, SEXE)
+        # Percentage and number of similar people in the dataset
+        st.markdown(f"🚀 **{translations.translate('number_of_similar_people_sex')}** `{int(number_sex)}`")
+        st.markdown(f"📊 **{translations.translate('percentage_of_similar_people_sex')}** `{percentage_sex:.3f}%`")
+
 
     # Age selection
-    EDAT_1 = st.slider(translations.translate('age'), 0, 100, value = 0, step = 1)
+    EDAT_1 = st.slider(translations.translate('age'), -1, 100, value = -1, step = 1)
     EDAT_Q = EDAT_1 // 5
+    
+    if(EDAT_1 != -1):
+        (percentage_age, number_age) =  analysis.calculate_similarity_percentage_age(df_1, EDAT_1)
+        # Percentage and number of similar people in the dataset
+        st.markdown(f"🚀 **{translations.translate('number_of_similar_people_age')}** `{int(number_age)}`")
+        st.markdown(f"📊 **{translations.translate('percentage_of_similar_people_age')}** `{percentage_age:.3f}%`")
 
     # Location selection
     district_options = [
@@ -54,6 +72,13 @@ with tab1:
         (10, 'Sant Martí')]
     CODI_DISTRICTE_DEST = st.selectbox(translations.translate('district'), district_options, format_func=lambda x: x[1])
 
+    if(CODI_DISTRICTE_DEST[0] != 0):
+        (percentage_district, number_district) =  analysis.calculate_similarity_percentage_district(df_1, CODI_DISTRICTE_DEST)
+        # Percentage and number of similar people in the dataset
+        st.markdown(f"🚀 **{translations.translate('number_of_similar_people_district')}** `{int(number_district)}`")
+        st.markdown(f"📊 **{translations.translate('percentage_of_similar_people_district')}** `{percentage_district:.3f}%`")
+
+    CODI_BARRI_DEST = (0,'')
     neighborhood_options = {
         1: [(0, translations.translate('select')), (1, 'el Raval'), (2, 'el Barri Gòtic'), (3, 'la Barceloneta'), (4, 'Sant Pere, Santa Caterina i la Ribera')],
         2: [(0, translations.translate('select')), (5, 'el Fort Pienc'), (6, 'la Sagrada Familia'), (7, 'la Dreta de l Eixample'), (8, 'l Antiga Esquerra de l Eixample'), (9, 'la Nova Esquerra de l Eixample'), (10, 'Sant Antoni')],
@@ -68,6 +93,12 @@ with tab1:
     if CODI_DISTRICTE_DEST[0] > 0:
         filtered_neighborhood_options = neighborhood_options[CODI_DISTRICTE_DEST[0]]
         CODI_BARRI_DEST = st.selectbox(translations.translate('neighborhood'), filtered_neighborhood_options, format_func=lambda x: x[1])
+
+    if(CODI_BARRI_DEST[0] != 0):
+        (percentage_neighborhood, number_neighborhood) =  analysis.calculate_similarity_percentage_neighborhood(df_1, CODI_BARRI_DEST)
+        # Percentage and number of similar people in the dataset
+        st.markdown(f"🚀 **{translations.translate('number_of_similar_people_neighborhood')}** `{int(number_neighborhood)}`")
+        st.markdown(f"📊 **{translations.translate('percentage_of_similar_people_neighborhood')}** `{percentage_neighborhood:.3f}%`")
 
     # Place of Birth selection
     place_birth_options = [
@@ -112,7 +143,7 @@ with tab1:
 
     # User input handling
     if st.button(translations.translate('analyze')):
-        percentage = analysis.calculate_similarity_percentage(df, SEXE, EDAT_1, CODI_DISTRICTE_DEST, CODI_BARRI_DEST)
+        (percentage_total, number_total) =  analysis.calculate_similarity_percentage_total(df_1, SEXE, EDAT_1, CODI_DISTRICTE_DEST, CODI_BARRI_DEST)
 
         st.markdown("### " + translations.translate("analysis_results"))
 
@@ -148,9 +179,9 @@ with tab2:
     st.header("Population Distribution")
     col1, col2 = st.columns(2)
     with col1:
-        selected_district = st.selectbox(translations.translate('select_district'), df['Nom_Districte'].unique())
+        selected_district = st.selectbox(translations.translate('select_district'), df_1['Nom_Districte'].unique())
 
-    population_district = df[df['Nom_Districte'] == selected_district].groupby('Nom_Barri').size().reset_index(name='Population')
+    population_district = df_1[df_1['Nom_Districte'] == selected_district].groupby('Nom_Barri').size().reset_index(name='Population')
     bar_chart = altair.Chart(population_district).mark_bar().encode(
         x='Nom_Barri:N',
         y='Population:Q',
@@ -160,33 +191,33 @@ with tab2:
     st.altair_chart(bar_chart, use_container_width=True)
 
     # 2. Gender Distribution Across Districts
-    selected_district_gender = st.selectbox(translations.translate('district_gender'), df['Nom_Districte'].unique(), key='district_gender')
-    gender_distribution = df[df['Nom_Districte'] == selected_district_gender].groupby('SEXE').size().reset_index(name='Count')
+    selected_district_gender = st.selectbox(translations.translate('district_gender'), df_1['Nom_Districte'].unique(), key='district_gender')
+    gender_distribution = df_1[df_1['Nom_Districte'] == selected_district_gender].groupby('SEXE').size().reset_index(name='Count')
     gender_distribution['Gender'] = gender_distribution['SEXE'].map({1: 'Female', 2: 'Male'})
     st.bar_chart(gender_distribution.set_index('Gender')['Count'])
 
     # 3. Age Distribution in Neighborhoods
     st.subheader("Age Distribution in Neighborhoods")
-    district_selected = st.selectbox('Select District', df['Nom_Districte'].unique(), key='district_age')
-    neighborhood_selected = st.selectbox('Select Neighborhood', df[df['Nom_Districte'] == district_selected]['Nom_Barri'].unique(), key='neighborhood_age')
-    age_distribution = df[(df['Nom_Districte'] == district_selected) & (df['Nom_Barri'] == neighborhood_selected)]['EDAT_1'].value_counts().sort_index()
+    district_selected = st.selectbox('Select District', df_1['Nom_Districte'].unique(), key='district_age')
+    neighborhood_selected = st.selectbox('Select Neighborhood', df_1[df_1['Nom_Districte'] == district_selected]['Nom_Barri'].unique(), key='neighborhood_age')
+    age_distribution = df_1[(df_1['Nom_Districte'] == district_selected) & (df_1['Nom_Barri'] == neighborhood_selected)]['EDAT_1'].value_counts().sort_index()
     st.bar_chart(age_distribution)
 
     # 4. Comparison of Age Groups between Two Districts
     st.subheader("Comparison of Age Groups between Two Districts")
-    district1 = st.selectbox('Select First District', df['Nom_Districte'].unique(), key='first_district')
-    district2 = st.selectbox('Select Second District', df['Nom_Districte'].unique(), key='second_district')
+    district1 = st.selectbox('Select First District', df_1['Nom_Districte'].unique(), key='first_district')
+    district2 = st.selectbox('Select Second District', df_1['Nom_Districte'].unique(), key='second_district')
     age_group_comparison = pd.DataFrame({
-        district1: df[df['Nom_Districte'] == district1]['EDAT_1'].value_counts().sort_index(),
-        district2: df[df['Nom_Districte'] == district2]['EDAT_1'].value_counts().sort_index()
+        district1: df_1[df_1['Nom_Districte'] == district1]['EDAT_1'].value_counts().sort_index(),
+        district2: df_1[df_1['Nom_Districte'] == district2]['EDAT_1'].value_counts().sort_index()
     })
     st.bar_chart(age_group_comparison)
 
     # 5. Aggregated Data by Gender and Age Group
     st.subheader("Aggregated Data by Gender and Age Group")
     min_age, max_age = st.slider("Select Age Range", 0, 100, (0, 100), key='age_range')
-    df['Gender'] = df['SEXE'].map({1: 'Female', 2: 'Male'})  # Map gender values
-    age_gender_aggregation = df[(df['EDAT_1'] >= min_age) & (df['EDAT_1'] <= max_age)].groupby(['Gender', pd.cut(df['EDAT_1'], bins=[0, 18, 35, 60, 100], labels=['0-18', '19-35', '36-60', '60+'])]).size().unstack().fillna(0)
+    df_1['Gender'] = df_1['SEXE'].map({1: 'Female', 2: 'Male'})  # Map gender values
+    age_gender_aggregation = df_1[(df_1['EDAT_1'] >= min_age) & (df_1['EDAT_1'] <= max_age)].groupby(['Gender', pd.cut(df_1['EDAT_1'], bins=[0, 18, 35, 60, 100], labels=['0-18', '19-35', '36-60', '60+'])]).size().unstack().fillna(0)
     st.table(age_gender_aggregation)
 
     # 6. Interactive Map of Population Density
@@ -196,13 +227,13 @@ with tab2:
     map_data_list = []
 
     # Iterate through each district and neighborhood
-    for district in df['Nom_Districte'].unique():
-        for neighborhood in df[df['Nom_Districte'] == district]['Nom_Barri'].unique():
+    for district in df_1['Nom_Districte'].unique():
+        for neighborhood in df_1[df_1['Nom_Districte'] == district]['Nom_Barri'].unique():
             # Geocode the neighborhood name to get coordinates
             g = geocoder.osm(neighborhood + ', ' + district)
             if g.ok:
                 lat, lon = g.latlng
-                population = df[(df['Nom_Districte'] == district) & (df['Nom_Barri'] == neighborhood)].shape[0]
+                population = df_1[(df_1['Nom_Districte'] == district) & (df_1['Nom_Barri'] == neighborhood)].shape[0]
                 # Append data to the list
                 map_data_list.append({'lat': lat, 'lon': lon, 'Population': population})
 
@@ -214,9 +245,9 @@ with tab2:
 
     # 7. Statistical Summary of Each Neighborhood
     st.subheader("Statistical Summary of Each Neighborhood")
-    district_stat = st.selectbox('Select District for Statistics', df['Nom_Districte'].unique(), key='district_stat')
-    neighborhood_stat = st.selectbox('Select Neighborhood for Statistics', df[df['Nom_Districte'] == district_stat]['Nom_Barri'].unique(), key='neighborhood_stat')
-    summary_stats = df[(df['Nom_Districte'] == district_stat) & (df['Nom_Barri'] == neighborhood_stat)]['EDAT_1'].describe()
+    district_stat = st.selectbox('Select District for Statistics', df_1['Nom_Districte'].unique(), key='district_stat')
+    neighborhood_stat = st.selectbox('Select Neighborhood for Statistics', df_1[df_1['Nom_Districte'] == district_stat]['Nom_Barri'].unique(), key='neighborhood_stat')
+    summary_stats = df_1[(df_1['Nom_Districte'] == district_stat) & (df_1['Nom_Barri'] == neighborhood_stat)]['EDAT_1'].describe()
 
     # Enhancing the display of statistical summary
     st.markdown("#### Summary Statistics")

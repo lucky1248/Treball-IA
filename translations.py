@@ -4,9 +4,9 @@ class Translations:
     def __init__(self):
         self.translations = {
             'Español': {
-                'title': '¿Quién es cómo yo?',
+                'title': 'Datos de Barcelona',
                 'main': 'Personas similares a ti',
-                'data_analysis': 'Análisis de datos',           
+                'data_analysis': 'Análisis de datos generales',           
                 'select': 'Selecciona',
                 'sex' : 'Sexo:',
                 'female': 'Mujer',
@@ -38,11 +38,19 @@ class Translations:
                 'not_specified' : 'No especificado',
                 'select_district' : 'Selecciona un distrito',
                 'district_gender' : 'Distribución de género por distrito',
+                'percentage_of_similar_people_sex' : 'Porcentaje de personas con el mismo sexo que tu:',
+                'number_of_similar_people_sex' : 'Número de personas con el mismo sexo que tu:',  
+                'percentage_of_similar_people_age' : 'Porcentaje de personas con la misma edat que tu:',
+                'number_of_similar_people_age' : 'Número de personas con la misma edat que tu:',                                
+                'percentage_of_similar_people_district' : 'Porcentaje de personas que viven en el mismo distrito que tu:',
+                'number_of_similar_people_district' : 'Número de personas que viven en el mismo distrito que tu:',
+                'percentage_of_similar_people_neighborhood' : 'Porcentaje de personas que viven en el mismo barrio que tu:',
+                'number_of_similar_people_neighborhood' : 'Número de personas que viven en el mismo barrio que tu:',            
             },
             'Català': {
-                'title': 'Qui és com jo?',
+                'title': 'Dades de Barcelona',
                 'main': 'Persones similars a tu',
-                'data_analysis': 'Anàlisi de dades',           
+                'data_analysis': 'Anàlisi de dades generals',           
                 'select': 'Selecciona',
                 'sex' : 'Sexe:',
                 'female': 'Dona',
@@ -73,7 +81,15 @@ class Translations:
                 'success_message' : 'El teu perfil s\'ha analitzat correctament!',
                 'not_specified' : 'No especificat',
                 'select_district' : 'Selecciona un districte',
-                'district_gender' : 'Distribució de gènere per districte'          
+                'district_gender' : 'Distribució de gènere per districte',
+                'percentage_of_similar_people_sex' : 'Percentatge de persones amb el mateix sexe que tu:',
+                'number_of_similar_people_sex' : 'Nombre de persones amb el mateix sexe que tu:',                
+                'percentage_of_similar_people_age' : 'Percentatge de persones amb la mateixa edat que tu:',
+                'number_of_similar_people_age' : 'Nombre de persones amb la mateixa edat que tu:',                                         
+                'percentage_of_similar_people_district' : 'Percentatge de persones que viuen al mateix districte que tu:',
+                'number_of_similar_people_district' : 'Nombre de persones que viuen al mateix districte que tu:',  
+                'percentage_of_similar_people_neighborhood' : 'Percentatge de persones que viuen al mateix barri que tu:',
+                'number_of_similar_people_neighborhood' : 'Nombre de persones que viuen al mateix barri que tu:', 
             }
         }
         self.idioma = 'Català'
