@@ -89,3 +89,16 @@ def calculate_similarity_percentage_neighborhood(df, user_neighborhood):
     filtered_df = filter_data_neighborhood(df, user_neighborhood[0])
     return calculate_similarity_percentage(df, filtered_df)
 
+def calculate_similarity_percentage_total(df_1, user_sex, user_age, user_district, user_neighborhood):
+    filtered_df = df_1
+    if(user_sex[0] != 0):
+        filtered_df = filter_data_sex(filtered_df, user_sex[0])
+    if(user_age != -1):
+        filtered_df = filter_data_age(filtered_df, user_age)
+    if(user_district[0] != 0):
+        filtered_df = filter_data_district(filtered_df, user_district[0])
+    if(user_neighborhood[0] != 0):
+        filtered_df = filter_data_neighborhood(filtered_df, user_neighborhood[0])
+    return calculate_similarity_percentage(df_1, filtered_df)
+
+

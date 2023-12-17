@@ -141,35 +141,27 @@ with tab1:
         (5, translations.translate('education_5'))]
     NIV_EDUCA_esta = st.selectbox(translations.translate('education'), education_options, format_func=lambda x: x[1])
 
-    # User input handling
-    if st.button(translations.translate('analyze')):
-        (percentage_total, number_total) =  analysis.calculate_similarity_percentage_total(df_1, SEXE, EDAT_1, CODI_DISTRICTE_DEST, CODI_BARRI_DEST)
 
-        st.markdown("### " + translations.translate("analysis_results"))
+    # Total analysis
+    st.subheader(translations.translate('analysis_results'))
+    (percentage_total, number_total) =  analysis.calculate_similarity_percentage_total(df_1, SEXE, EDAT_1, CODI_DISTRICTE_DEST, CODI_BARRI_DEST)
+    st.markdown(f"🚀 **{translations.translate('number_of_similar_people_total')}** `{int(number_total)}`")
+    st.markdown(f"📊 **{translations.translate('percentage_of_similar_people_total')}** `{percentage_total:.5f}%`")
+    if number_total == 0:
+        st.warning(translations.translate('analysis_results_1'))
+    elif number_total == 1:
+        st.success(translations.translate('analysis_results_2'))
+    elif number_total <= 5:
+        st.success(translations.translate('analysis_results_3'))
+    elif number_total <= 10:
+        st.info(translations.translate('analysis_results_4'))
+    elif number_total <= 20:
+        st.info(translations.translate('analysis_results_5'))
+    elif number_total <= 50:
+        st.warning(translations.translate('analysis_results_6'))
+    else:
+        st.warning(translations.translate('analysis_results_7'))
 
-        col1, col2, col3 = st.columns(3)
-
-        # Column 1: Sex
-        col1.metric(label=translations.translate('sex'),
-                    value=translations.translate('Female') if SEXE[0] == 1 else translations.translate('Male') if SEXE[0] == 2 else translations.translate('not_specified'))
-
-        # Column 2: Age
-        col2.metric(label=translations.translate('age'),
-                    value=str(EDAT_1) if EDAT_1 > 0 else translations.translate('not_specified'))
-
-        # Column 3: District
-        col3.metric(label=translations.translate('district'),
-                    value=str(CODI_DISTRICTE_DEST[1]) if CODI_DISTRICTE_DEST[0] > 0 else translations.translate('not_specified'))
-
-        # Neighborhood Code
-        st.metric(label=translations.translate('neighborhood'),
-                value=str(CODI_BARRI_DEST[1]) if CODI_BARRI_DEST[0] > 0 else translations.translate('not_specified'))
-
-        # Percentage of similar people in the dataset
-        st.markdown(f"📊 **{translations.translate('percentage_of_similar_people')}** `{percentage:.2f}%`")
-        st.progress(percentage)
-
-        st.success(translations.translate('success_message'))
 
 with tab2:
     # Custom styles for charts
