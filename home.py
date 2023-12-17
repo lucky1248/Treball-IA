@@ -1,8 +1,10 @@
+import altair
 import streamlit as st
 from translations import translations
 import analysis
 import pandas as pd
 import geocoder
+import seaborn as sns
 
 # Load data
 df = analysis.load_data('datasets/2023_pad_mdba_sexe_edat-1.csv')
@@ -139,10 +141,23 @@ with tab1:
         st.success(translations.translate('success_message'))
 
 with tab2:
+    # Custom styles for charts
+    sns.set(style="whitegrid")
+
     # 1. Population Distribution by District and Neighborhood
-    selected_district = st.selectbox(translations.translate('select_district'), df['Nom_Districte'].unique())
+    st.header("Population Distribution")
+    col1, col2 = st.columns(2)
+    with col1:
+        selected_district = st.selectbox(translations.translate('select_district'), df['Nom_Districte'].unique())
+
     population_district = df[df['Nom_Districte'] == selected_district].groupby('Nom_Barri').size().reset_index(name='Population')
-    st.bar_chart(population_district.set_index('Nom_Barri')['Population'])
+    bar_chart = altair.Chart(population_district).mark_bar().encode(
+        x='Nom_Barri:N',
+        y='Population:Q',
+        color='Nom_Barri:N',
+        tooltip=['Nom_Barri', 'Population']
+    ).interactive()
+    st.altair_chart(bar_chart, use_container_width=True)
 
     # 2. Gender Distribution Across Districts
     selected_district_gender = st.selectbox(translations.translate('district_gender'), df['Nom_Districte'].unique(), key='district_gender')
