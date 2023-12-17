@@ -38,7 +38,7 @@ with tab1:
         (0, translations.translate('select')),
         (1, translations.translate('female')),
         (2, translations.translate('male'))]
-    SEXE = st.selectbox(translations.translate('sex'), sex_options, format_func=lambda x: x[1])
+    SEXE = st.selectbox(translations.translate('age'), sex_options, format_func=lambda x: x[1])
     
     if(SEXE[0] != 0):
         (percentage_sex, number_sex) =  analysis.calculate_similarity_percentage_sex(df_1, SEXE)
@@ -49,6 +49,9 @@ with tab1:
 
     # Age selection
     EDAT_1 = st.slider(translations.translate('age'), -1, 100, value = -1, step = 1)
+    st.markdown(f"*{translations.translate('age_explication_1')}*")
+    st.markdown(f"*{translations.translate('age_explication_2')}*")
+
     EDAT_Q = EDAT_1 // 5
     
     if(EDAT_1 != -1):
@@ -56,6 +59,7 @@ with tab1:
         # Percentage and number of similar people in the dataset
         st.markdown(f"🚀 **{translations.translate('number_of_similar_people_age')}** `{int(number_age)}`")
         st.markdown(f"📊 **{translations.translate('percentage_of_similar_people_age')}** `{percentage_age:.3f}%`")
+
 
     # Location selection
     district_options = [
@@ -100,6 +104,7 @@ with tab1:
         st.markdown(f"🚀 **{translations.translate('number_of_similar_people_neighborhood')}** `{int(number_neighborhood)}`")
         st.markdown(f"📊 **{translations.translate('percentage_of_similar_people_neighborhood')}** `{percentage_neighborhood:.3f}%`")
 
+
     # Place of Birth selection
     place_birth_options = [
         (0, translations.translate('select')),
@@ -109,6 +114,12 @@ with tab1:
         (4, translations.translate('place_birth_4')),
         (5, translations.translate('place_birth_5'))]
     LLOC_NAIX = st.selectbox(translations.translate('place_birth'), place_birth_options, format_func=lambda x: x[1])
+
+    if(LLOC_NAIX[0] != 0):
+        (percentage_placebirth, number_placebirth) =  analysis.calculate_similarity_percentage_placebirth(df_1, df_2, LLOC_NAIX)
+        # Percentage and number of similar people in the dataset
+        st.markdown(f"🚀 **{translations.translate('number_of_similar_people_placebirth')}** `{int(number_placebirth)}`")
+        st.markdown(f"📊 **{translations.translate('percentage_of_similar_people_placebirth')}** `{percentage_placebirth:.3f}%`")
 
     place_birth_advanced_options = {
         3: [(0, translations.translate('select')), (1, 'Andalusia'), (2, 'Aragó'), (3, 'Principat d Astúries'), (4, 'Illes Balears'), (5, 'Canàries'), (6, 'Cantàbria'), (7, 'Castella i Lleò'), (8, 'Castella - la Manxa'), (9, 'Catalunya'), (10, 'Comunitat Valenciana'), (11, 'Extremadura'), (12, 'Galícia'), (13, 'Comunitat de Madrid'), (14, 'Regió de Murcia'), (15, 'Comunitat Foral de Navarra'), (16, 'País Basc'), (17, 'La Rioja'), (18, 'Ceuta'), (19, 'Melilla')],
@@ -131,6 +142,19 @@ with tab1:
         filtered_place_birth_advanced_options = place_birth_advanced_options[LLOC_NAIX[0]]
         LLOC_NAIX_CONTINENT = st.selectbox(translations.translate('lloc_naix_continent'), filtered_place_birth_advanced_options, format_func=lambda x: x[1])
 
+    if(LLOC_NAIX[0] == 3 and LLOC_NAIX_CCAA[0] != 0):
+        (percentage_ccaa, number_ccaa) =  analysis.calculate_similarity_percentage_ccaa(df_1, df_3, LLOC_NAIX_CCAA)
+        # Percentage and number of similar people in the dataset
+        st.markdown(f"🚀 **{translations.translate('number_of_similar_people_ccaa')}** `{int(number_ccaa)}`")
+        st.markdown(f"📊 **{translations.translate('percentage_of_similar_people_ccaa')}** `{percentage_ccaa:.3f}%`")
+
+    if(LLOC_NAIX[0] == 5 and LLOC_NAIX_CONTINENT[0] != 0):
+        (percentage_continent, number_continent) =  analysis.calculate_similarity_percentage_continent(df_1, df_4, LLOC_NAIX_CONTINENT)
+        # Percentage and number of similar people in the dataset
+        st.markdown(f"🚀 **{translations.translate('number_of_similar_people_continent')}** `{int(number_continent)}`")
+        st.markdown(f"📊 **{translations.translate('percentage_of_similar_people_continent')}** `{percentage_continent:.3f}%`")
+
+
     # Education level selection
     education_options = [
         (0, translations.translate('select')),
@@ -140,6 +164,13 @@ with tab1:
         (4, translations.translate('education_4')),
         (5, translations.translate('education_5'))]
     NIV_EDUCA_esta = st.selectbox(translations.translate('education'), education_options, format_func=lambda x: x[1])
+    st.markdown(f"*{translations.translate('education_explication')}*")
+
+    if(NIV_EDUCA_esta[0] != 0):
+        (percentage_education, number_education) =  analysis.calculate_similarity_percentage_education(df_1, df_5, NIV_EDUCA_esta)
+        # Percentage and number of similar people in the dataset
+        st.markdown(f"🚀 **{translations.translate('number_of_similar_people_education')}** `{int(number_education)}`")
+        st.markdown(f"📊 **{translations.translate('percentage_of_similar_people_education')}** `{percentage_education:.3f}%`")
 
 
     # Total analysis
