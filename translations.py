@@ -4,7 +4,7 @@ class Translations:
     def __init__(self):
         self.translations = {
             'Español': {
-                'title': 'Testing deploy',
+                'title': 'Datos de Barcelona',
                 'main': 'Personas similares a ti',
                 'data_analysis': 'Análisis de datos generales',           
                 'select': 'Selecciona',
