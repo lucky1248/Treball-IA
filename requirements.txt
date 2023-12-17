@@ -1,5 +1,5 @@
 streamlit
-matplotlib
+matplotlib==3.2.2
 seaborn
 pandas
 geocoder
