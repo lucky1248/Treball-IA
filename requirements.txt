@@ -1,0 +1,6 @@
+streamlit
+matplotlib==3.8.2
+seaborn
+pandas
+geocoder
+altair
