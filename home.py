@@ -6,6 +6,13 @@ import pandas as pd
 import geocoder
 import seaborn as sns
 
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+from sklearn.preprocessing import LabelEncoder
+from sklearn.ensemble import RandomForestClassifier
+
 # Load data
 df_1 = analysis.load_data('datasets/2023_pad_mdba_sexe_edat-1.csv')
 df_2 = analysis.load_data('datasets/2023_pad_mdb_lloc-naix_edat-q_sexe.csv')
@@ -193,8 +200,115 @@ with tab1:
     else:
         st.warning(translations.translate('analysis_results_7'))
 
+# Function to load and preprocess data, and train the model
+def load_data_and_train_model():
+    # Load your dataset
+    df = pd.read_csv('datasets/2023_pad_mdb_lloc-naix_edat-q_sexe.csv')  # Replace with your dataset path
+
+    # Convert district names to numeric codes for modeling
+    label_encoder = LabelEncoder()
+    df['Nom_Districte_Encoded'] = label_encoder.fit_transform(df['Nom_Districte'])
+
+    # Preprocessing
+    X = df[['Nom_Districte_Encoded', 'EDAT_Q']]  # Feature columns
+    y = df['SEXE']  # Target column
+
+    # Split the data
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+    # Train the model
+    model = LogisticRegression()
+    model.fit(X_train, y_train)
+
+    return model, df, label_encoder
+
+def load_and_prepare_data_2():
+    # Load datasets
+    df_main = pd.read_csv('datasets/2023_pad_mdb_niv-educa-esta_edat-q_sexe.csv')
+    df_additional = pd.read_csv('datasets/2023_pad_mdb_lloc-naix_edat-q_sexe.csv')
+
+    # Merging datasets on common columns
+    df_merged = pd.merge(df_main, df_additional, on=['Nom_Districte', 'Nom_Barri', 'EDAT_Q', 'SEXE'], how='inner')
+
+    # Feature Engineering
+    district_encoder = LabelEncoder()
+    neighborhood_encoder = LabelEncoder()
+    df_merged['Nom_Districte_Encoded'] = district_encoder.fit_transform(df_merged['Nom_Districte'])
+    df_merged['Nom_Barri_Encoded'] = neighborhood_encoder.fit_transform(df_merged['Nom_Barri'])
+
+    # Selecting relevant columns
+    X = df_merged[['Nom_Districte_Encoded', 'Nom_Barri_Encoded', 'EDAT_Q', 'NIV_EDUCA_esta']]
+    y = df_merged['SEXE']
+
+    return X, y, df_merged, district_encoder, neighborhood_encoder
+
+# Function to train the model
+def train_model(X, y):
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    model = RandomForestClassifier(random_state=42)
+    model.fit(X_train, y_train)
+
+    # Evaluate the model
+    predictions = model.predict(X_test)
+    accuracy = accuracy_score(y_test, predictions)
+    print('Model Accuracy:', accuracy)
+
+    return model
 
 with tab2:
+    # Load data and train model
+    # model, df, label_encoder = load_data_and_train_model()
+
+    # st.header("Predict Gender")
+    
+    # # User inputs
+    # district_input = st.selectbox('Select District', df['Nom_Districte'].unique())
+    # encoded_district = label_encoder.transform([district_input])[0]
+
+    # # User-friendly age selection
+    # age = st.slider('Select Your Age', min_value=0, max_value=100, value=25)
+    # age_group_quinquennial = age // 5  # Mapping age to quinquennial group
+
+    # if st.button('Predict Gender'):
+    #     prediction = model.predict([[encoded_district, age_group_quinquennial]])
+    #     predicted_gender = 'Male' if prediction[0] == 1 else 'Female'
+    #     st.success(f'Predicted Gender: {predicted_gender}')
+
+    X, y, df_merged, district_encoder, neighborhood_encoder = load_and_prepare_data_2()
+    model = train_model(X, y)
+    st.header("Gender Prediction based on District, Neighborhood, Age, and Education Level")
+
+    # District selection
+    district_options = district_encoder.classes_
+    selected_district = st.selectbox('Select District', district_options)
+
+    # Neighborhood selection based on district
+    filtered_neighborhoods = df_merged[df_merged['Nom_Districte'] == selected_district]['Nom_Barri'].unique()
+    selected_neighborhood = st.selectbox('Select Neighborhood', filtered_neighborhoods)
+
+    # Age selection
+    age = st.number_input('Enter Your Age', min_value=0, max_value=100, value=25)
+    age_group = age // 5  # Mapping age to quinquennial group
+
+    # Education level selection
+    education_levels = {
+        'Sin estudios': 1,
+        'Estudios primarios, certificado de escolaridad, EGB': 2,
+        'Bachillerato elemental, graduado escolar, ESO, FPI': 3,
+        'Bachillerato superior, BUP, COU, FPII, CFGM grado medio': 4,
+        'Estudios universitarios, CFGS grado superior': 5
+    }
+    selected_education = st.selectbox('Select Education Level', list(education_levels.keys()))
+
+    # Encoding user inputs
+    encoded_district = district_encoder.transform([selected_district])[0]
+    encoded_neighborhood = neighborhood_encoder.transform([selected_neighborhood])[0]
+
+    if st.button('Predict Gender'):
+        prediction = model.predict([[encoded_district, encoded_neighborhood, age_group, education_levels[selected_education]]])
+        predicted_gender = 'Male' if prediction[0] == 1 else 'Female'
+        st.success(f'Predicted Gender: {predicted_gender}')
+
     # Custom styles for charts
     sns.set(style="whitegrid")
 
@@ -242,29 +356,6 @@ with tab2:
     df_1['Gender'] = df_1['SEXE'].map({1: 'Female', 2: 'Male'})  # Map gender values
     age_gender_aggregation = df_1[(df_1['EDAT_1'] >= min_age) & (df_1['EDAT_1'] <= max_age)].groupby(['Gender', pd.cut(df_1['EDAT_1'], bins=[0, 18, 35, 60, 100], labels=['0-18', '19-35', '36-60', '60+'])]).size().unstack().fillna(0)
     st.table(age_gender_aggregation)
-
-    # 6. Interactive Map of Population Density
-    st.subheader("Interactive Map of Population Density")
-
-    # Initialize a list to hold the map data
-    map_data_list = []
-
-    # Iterate through each district and neighborhood
-    for district in df_1['Nom_Districte'].unique():
-        for neighborhood in df_1[df_1['Nom_Districte'] == district]['Nom_Barri'].unique():
-            # Geocode the neighborhood name to get coordinates
-            g = geocoder.osm(neighborhood + ', ' + district)
-            if g.ok:
-                lat, lon = g.latlng
-                population = df_1[(df_1['Nom_Districte'] == district) & (df_1['Nom_Barri'] == neighborhood)].shape[0]
-                # Append data to the list
-                map_data_list.append({'lat': lat, 'lon': lon, 'Population': population})
-
-    # Convert the list to a DataFrame
-    map_data = pd.DataFrame(map_data_list)
-
-    # Display the map
-    st.map(map_data)
 
     # 7. Statistical Summary of Each Neighborhood
     st.subheader("Statistical Summary of Each Neighborhood")
