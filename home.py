@@ -38,7 +38,7 @@ with tab1:
         (0, translations.translate('select')),
         (1, translations.translate('female')),
         (2, translations.translate('male'))]
-    SEXE = st.selectbox(translations.translate('age'), sex_options, format_func=lambda x: x[1])
+    SEXE = st.selectbox(translations.translate('sex'), sex_options, format_func=lambda x: x[1])
     
     if(SEXE[0] != 0):
         (percentage_sex, number_sex) =  analysis.calculate_similarity_percentage_sex(df_1, SEXE)
