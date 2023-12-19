@@ -67,7 +67,13 @@ class Translations:
                 'percentage_of_similar_people_education' : 'Porcentaje de personas con el mismo nivel educativo que tu:',
                 'number_of_similar_people_education' : 'Número de personas con el mismo nivel educativo que tu:',   
                 'percentage_of_similar_people_total' : 'Porcentaje de personas como tu:',
-                'number_of_similar_people_total' : 'Número de personas como tu:', 
+                'number_of_similar_people_total' : 'Número de personas como tu:',
+                'prediction_gender': 'Predicción de sexo basada en distrito, barrio, edad y nivel educativo',
+                'predict' : 'Predecir',
+                'predicted_gender' : 'Sexo predicho:',
+                'life_expectancy_prediction' : 'Predicción de esperanza de vida basada en distrito, barrio, sexo y nivel educativo',
+                'years' : 'años',
+                'predicted_age' : 'Edad predicha:',
             },
             'Català': {
                 'title': 'Dades de Barcelona',
@@ -133,7 +139,13 @@ class Translations:
                 'percentage_of_similar_people_education' : 'Percentatge de persones amb el mateix nivell educatiu que tu:',
                 'number_of_similar_people_education' : 'Nombre de persones amb el mateix nivell educatiu que tu:',   
                 'percentage_of_similar_people_total' : 'Percentatge de persones com tu:',
-                'number_of_similar_people_total' : 'Nombre de persones com tu:', 
+                'number_of_similar_people_total' : 'Nombre de persones com tu:',
+                'prediction_gender' : 'Predicció de sexe basada en districte, barri, edat i nivell educatiu',
+                'predict' : 'Predir',
+                'predicted_gender' : 'Sexe predit:',
+                'life_expectancy_prediction' : 'Predicció d\'esperança de vida basada en districte, barri, sexe i nivell educatiu',
+                'years' : 'anys',
+                'predicted_age' : 'Edat predita:',
             }
         }
         self.idioma = 'Català'
