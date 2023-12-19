@@ -78,7 +78,7 @@ class Translations:
             'Català': {
                 'title': 'Dades de Barcelona',
                 'text_inici' : 'Aquest projecte està fet usant diversos repositoris de dades que ofereix OpenData, un moviment impulsat per l\'Ajuntament de Barcelona amb el principal objectiu d\'aprofitar al màxim els recursos públics disponibles.',
-                'text_inici_tab_1' : 'Descobreix quantes persones de Barcelona són com tu! En aquesta pestanya pots jugar introduint diferents dades bàsiques i veient quants habitants de la ciutat Barcelona les satisfant.',
+                'text_inici_tab_1' : 'Descobreix quantes persones de Barcelona són com tu! En aquesta pestanya pots jugar introduint diferents dades bàsiques i veient quants habitants de la ciutat Barcelona les satisfan.',
                 'introduce_data' : 'Introdueix les teves dades!',
                 'introduce_data_or' : '(O juga amb els valors per veure com varia el resultat...)',
                 'main': 'Persones similars a tu',

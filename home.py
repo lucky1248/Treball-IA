@@ -2,8 +2,8 @@ import altair
 import streamlit as st
 from translations import translations
 import analysis
+import pandas as predicted_gender
 import pandas as pd
-import geocoder
 import seaborn as sns
 import os
 
