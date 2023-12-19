@@ -246,6 +246,7 @@ with tab2:
         predicted_gender = translations.translate('male') if prediction[0] == 1 else translations.translate('female')
         st.success(f'{translations.translate("predicted_gender")} {predicted_gender}')
 
+
     # Predict lifespan
     if os.path.exists('lifespan_models.pkl') and os.path.exists('lifespan_district_encoder.pkl') and os.path.exists('lifespan_neighborhood_encoder.pkl'):
         models, district_encoder, neighborhood_encoder = model.load_lifespan_models_and_encoders()
@@ -253,7 +254,7 @@ with tab2:
         X, df_merged, district_encoder, neighborhood_encoder = model.load_lifespan_model()
         models = model.train_lifespan_models(X, df_merged)
         model.save_lifespan_models_and_encoders(models, district_encoder, neighborhood_encoder)
-    st.header("Life Expectancy Prediction")
+    st.header(translations.translate('life_expectancy_prediction'))
 
     # Gender selection
     gender_options = {
@@ -293,8 +294,7 @@ with tab2:
     if st.button(translations.translate('predict'), key="predict_lifespan"):
         input_features = [encoded_district, encoded_neighborhood, selected_education_int, encoded_gender]
         predicted_age_group_min, predicted_age_group_max = model.predict_lifespan(models, input_features)
-        st.success(f"Predicted Age Range: {predicted_age_group_min}-{predicted_age_group_max} years")
-
+        st.success(f'{translations.translate("predicted_age")} {predicted_age_group_min}-{predicted_age_group_max} {translations.translate("years")}')
 
 
     # Custom styles for charts

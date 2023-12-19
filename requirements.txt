@@ -4,3 +4,5 @@ seaborn
 pandas
 geocoder
 altair
+scikit-learn
+pickle
