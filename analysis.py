@@ -32,7 +32,10 @@ def filter_data_sex(df, user_sex):
     return df[(df['SEXE'] == user_sex)]    
 
 def filter_data_age(df, user_age):
-    return df[(df['EDAT_1'] == user_age)]    
+    return df[(df['EDAT_1'] == user_age)]   
+ 
+def filter_data_age_q(df, user_age):
+    return df[(df['EDAT_Q'] == user_age)]   
 
 def filter_data_district(df, user_district):
     return df[(df['Codi_Districte'] == user_district)] 
@@ -108,23 +111,47 @@ def calculate_similarity_percentage_total(df_1, df_2, df_3, df_4, df_5, user_sex
     if(user_sex[0] != 0):
         filtered_df1 = filter_data_sex(filtered_df1, user_sex[0])
         filtered_df2 = filter_data_sex(filtered_df2, user_sex[0])
+        filtered_df3 = filter_data_sex(filtered_df3, user_sex[0])
+        filtered_df4 = filter_data_sex(filtered_df4, user_sex[0])
+        filtered_df5 = filter_data_sex(filtered_df5, user_sex[0])
     if(user_age != -1):
         filtered_df1 = filter_data_age(filtered_df1, user_age)
-        filtered_df2 = filter_data_age(filtered_df1, user_age_q)
+        filtered_df2 = filter_data_age_q(filtered_df2, user_age_q)
+        filtered_df4 = filter_data_age_q(filtered_df4, user_age_q)
+        filtered_df5 = filter_data_age_q(filtered_df5, user_age_q)
     if(user_district[0] != 0):
         filtered_df1 = filter_data_district(filtered_df1, user_district[0])
         filtered_df2 = filter_data_district(filtered_df2, user_district[0])
+        filtered_df3 = filter_data_district(filtered_df3, user_district[0])
+        filtered_df4 = filter_data_district(filtered_df4, user_district[0])
+        filtered_df5 = filter_data_district(filtered_df5, user_district[0])    
     if(user_neighborhood[0] != 0):
         filtered_df1 = filter_data_neighborhood(filtered_df1, user_neighborhood[0])
         filtered_df2 = filter_data_neighborhood(filtered_df2, user_neighborhood[0])
+        filtered_df3 = filter_data_neighborhood(filtered_df3, user_neighborhood[0])
+        filtered_df4 = filter_data_neighborhood(filtered_df4, user_neighborhood[0])
+        filtered_df5 = filter_data_neighborhood(filtered_df5, user_neighborhood[0])    
     (p1, n1) = calculate_similarity_percentage(df_1, filtered_df1)
-    if (user_placebirth[0] == 0):
-        return (p1, n1)
     if(user_placebirth[0] != 0):
         filtered_df2 = filter_data_placebirth(filtered_df2, user_placebirth[0])
         (p2, n2) = calculate_similarity_percentage(df_1, filtered_df2)
-        (p2, n2) = (round(p2/5), round(n2/5))
-        return (p2, n2)
+        if(user_age != -1):
+            (p2, n2) = (p2/5, round(n2/5))
+        if(user_placebirth[0] == 3 and user_ccaa[0] != 0):
+            filtered_df3 = filter_data_ccaa(filtered_df3, user_ccaa[0])
+            (p3, n3) = calculate_similarity_percentage(df_1, filtered_df3)
+            if(user_age != -1):
+                (p3, n3) = (p3/100, round(n3/100))
+            return(p3,n3)
+        elif(user_placebirth[0] == 5 and user_continent[0] != 0):
+            filtered_df4 = filter_data_continent(filtered_df4, user_continent[0])
+            (p4, n4) = calculate_similarity_percentage(df_1, filtered_df4)
+            if(user_age != -1):
+                (p4, n4) = (p4/5, round(n4/5))
+            return(p4,n4)
+        return(p2,n2)            
+    else:
+        return (p1, n1)
 
 
 
