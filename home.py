@@ -155,9 +155,12 @@ with tab1:
     place_birth_advanced_options = {
         3: [(0, translations.translate('select')), (1, 'Andalusia'), (2, 'Aragó'), (3, 'Principat d Astúries'), (4, 'Illes Balears'), (5, 'Canàries'), (6, 'Cantàbria'), (7, 'Castella i Lleò'), (8, 'Castella - la Manxa'), (9, 'Catalunya'), (10, 'Comunitat Valenciana'), (11, 'Extremadura'), (12, 'Galícia'), (13, 'Comunitat de Madrid'), (14, 'Regió de Murcia'), (15, 'Comunitat Foral de Navarra'), (16, 'País Basc'), (17, 'La Rioja'), (18, 'Ceuta'), (19, 'Melilla')],
         5: [(0, translations.translate('select')), (1, 'Àfrica'), (2, 'Amèrica'), (3, 'Àsia'), (4, 'Europa'), (5, 'Oceania')]}
+    LLOC_NAIX_CCAA = (0,0)
+    LLOC_NAIX_CONTINENT = (0,0)
+
     if LLOC_NAIX[0] == 1:
         LLOC_NAIX_CCAA = (9, 'Catalunya')
-        LLOC_NAIX_CONTINENT= (4, 'Europa')
+        LLOC_NAIX_CONTINENT = (4, 'Europa')
     elif LLOC_NAIX[0] == 2:
         LLOC_NAIX_CCAA = (9, 'Catalunya')
         LLOC_NAIX_CONTINENT = (4, 'Europa')
@@ -206,7 +209,7 @@ with tab1:
 
     # Total analysis
     st.subheader(translations.translate('analysis_results'))
-    (percentage_total, number_total) =  analysis.calculate_similarity_percentage_total(df_1, SEXE, EDAT_1, CODI_DISTRICTE_DEST, CODI_BARRI_DEST)
+    (percentage_total, number_total) =  analysis.calculate_similarity_percentage_total(df_1, df_2, df_3, df_4, df_5, SEXE, EDAT_1, EDAT_Q, CODI_DISTRICTE_DEST, CODI_BARRI_DEST, LLOC_NAIX, LLOC_NAIX_CCAA, LLOC_NAIX_CONTINENT, NIV_EDUCA_esta)
     st.markdown(f"🚀 **{translations.translate('number_of_similar_people_total')}** `{int(number_total)}`")
     st.markdown(f"📊 **{translations.translate('percentage_of_similar_people_total')}** `{percentage_total:.5f}%`")
     if number_total == 0:
