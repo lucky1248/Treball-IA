@@ -5,6 +5,10 @@ class Translations:
         self.translations = {
             'Español': {
                 'title': 'Datos de Barcelona',
+                'text_inici' : 'Este proyecto está hecho usando distintos repositorios de datos que ofrece OpenData, un movimiento impulsado por el Ajuntament de Barcelona con el principal objectvo de aprovechar al máximo los recursos públicos disponibles.',
+                'text_inici_tab_1' : '¡Descubre cuántas personas de Barcelona son como tu! En esta pestaña puedes jugar introduciendo distintos datos básicos y viendo cuantos habitantes de la ciudad de Barcelona las satisfacen.',
+                'introduce_data' : 'Introduce tus datos!',
+                'introduce_data_or' : '(O juega con los valores para ver como varia el resultado...)',                
                 'main': 'Personas similares a ti',
                 'data_analysis': 'Análisis de datos generales',           
                 'select': 'Selecciona',
@@ -67,6 +71,10 @@ class Translations:
             },
             'Català': {
                 'title': 'Dades de Barcelona',
+                'text_inici' : 'Aquest projecte està fet usant diversos repositoris de dades que ofereix OpenData, un moviment impulsat per l\'Ajuntament de Barcelona amb el principal objectiu d\'aprofitar al màxim els recursos públics disponibles.',
+                'text_inici_tab_1' : 'Descobreix quantes persones de Barcelona són com tu! En aquesta pestanya pots jugar introduint diferents dades bàsiques i veient quants habitants de la ciutat Barcelona les satisfant.',
+                'introduce_data' : 'Introdueix les teves dades!',
+                'introduce_data_or' : '(O juga amb els valors per veure com varia el resultat...)',
                 'main': 'Persones similars a tu',
                 'data_analysis': 'Anàlisi de dades generals',           
                 'select': 'Selecciona',

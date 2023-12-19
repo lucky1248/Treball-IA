@@ -35,16 +35,44 @@ with col2:
 # Title
 st.title(translations.translate('title'))
 
+st.write(translations.translate('text_inici'))
+st.write("https://opendata-ajuntament.barcelona.cat/data/ca/organization/poblacio")
+
 # Create tabs
 tab1, tab2 = st.tabs([translations.translate('main'), translations.translate('data_analysis')])
+st.markdown(
+    """
+    <style>
+        .stSelectbox label {
+            font-weight: bold;
+            color: red;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+st.markdown(
+    """
+    <style>
+        .stSlider label {
+            font-weight: bold;
+            color: red;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 with tab1:
-
+    st.write(translations.translate('text_inici_tab_1'))
+    st.subheader(translations.translate('introduce_data'))
+    st.write(translations.translate('introduce_data_or'))
     # Sex selection
     sex_options = [
         (0, translations.translate('select')),
         (1, translations.translate('female')),
         (2, translations.translate('male'))]
+
     SEXE = st.selectbox(translations.translate('sex'), sex_options, format_func=lambda x: x[1])
     
     if(SEXE[0] != 0):
@@ -203,7 +231,7 @@ with tab1:
 # Function to load and preprocess data, and train the model
 def load_data_and_train_model():
     # Load your dataset
-    df = pd.read_csv('datasets/2023_pad_mdb_lloc-naix_edat-q_sexe.csv')  # Replace with your dataset path
+    df = pd.read_csv('datasets/2023_pad_mdb_lloc-naix_edat-q_sexe.csv') 
 
     # Convert district names to numeric codes for modeling
     label_encoder = LabelEncoder()
