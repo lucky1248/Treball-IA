@@ -5,4 +5,3 @@ pandas
 geocoder
 altair
 scikit-learn
-pickle
