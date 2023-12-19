@@ -5,13 +5,9 @@ import analysis
 import pandas as pd
 import geocoder
 import seaborn as sns
+import os
 
-
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
-from sklearn.preprocessing import LabelEncoder
-from sklearn.ensemble import RandomForestClassifier
+import model
 
 # Load data
 df_1 = analysis.load_data('datasets/2023_pad_mdba_sexe_edat-1.csv')
@@ -200,114 +196,106 @@ with tab1:
     else:
         st.warning(translations.translate('analysis_results_7'))
 
-# Function to load and preprocess data, and train the model
-def load_data_and_train_model():
-    # Load your dataset
-    df = pd.read_csv('datasets/2023_pad_mdb_lloc-naix_edat-q_sexe.csv')  # Replace with your dataset path
-
-    # Convert district names to numeric codes for modeling
-    label_encoder = LabelEncoder()
-    df['Nom_Districte_Encoded'] = label_encoder.fit_transform(df['Nom_Districte'])
-
-    # Preprocessing
-    X = df[['Nom_Districte_Encoded', 'EDAT_Q']]  # Feature columns
-    y = df['SEXE']  # Target column
-
-    # Split the data
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-
-    # Train the model
-    model = LogisticRegression()
-    model.fit(X_train, y_train)
-
-    return model, df, label_encoder
-
-def load_and_prepare_data_2():
-    # Load datasets
-    df_main = pd.read_csv('datasets/2023_pad_mdb_niv-educa-esta_edat-q_sexe.csv')
-    df_additional = pd.read_csv('datasets/2023_pad_mdb_lloc-naix_edat-q_sexe.csv')
-
-    # Merging datasets on common columns
-    df_merged = pd.merge(df_main, df_additional, on=['Nom_Districte', 'Nom_Barri', 'EDAT_Q', 'SEXE'], how='inner')
-
-    # Feature Engineering
-    district_encoder = LabelEncoder()
-    neighborhood_encoder = LabelEncoder()
-    df_merged['Nom_Districte_Encoded'] = district_encoder.fit_transform(df_merged['Nom_Districte'])
-    df_merged['Nom_Barri_Encoded'] = neighborhood_encoder.fit_transform(df_merged['Nom_Barri'])
-
-    # Selecting relevant columns
-    X = df_merged[['Nom_Districte_Encoded', 'Nom_Barri_Encoded', 'EDAT_Q', 'NIV_EDUCA_esta']]
-    y = df_merged['SEXE']
-
-    return X, y, df_merged, district_encoder, neighborhood_encoder
-
-# Function to train the model
-def train_model(X, y):
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-    model = RandomForestClassifier(random_state=42)
-    model.fit(X_train, y_train)
-
-    # Evaluate the model
-    predictions = model.predict(X_test)
-    accuracy = accuracy_score(y_test, predictions)
-    print('Model Accuracy:', accuracy)
-
-    return model
-
+### Data analysis ###
 with tab2:
-    # Load data and train model
-    # model, df, label_encoder = load_data_and_train_model()
+    # Predict gender
+    if os.path.exists('gender_models.pkl') and os.path.exists('gender_district_encoder.pkl') and os.path.exists('gender_neighborhood_encoder.pkl'):
+        gender_model, district_encoder, neighborhood_encoder = model.load_gender_models_and_encoders()
 
-    # st.header("Predict Gender")
-    
-    # # User inputs
-    # district_input = st.selectbox('Select District', df['Nom_Districte'].unique())
-    # encoded_district = label_encoder.transform([district_input])[0]
+        df_merged = pd.read_csv('datasets/merged_gender_data.csv')
+    else:
+        X, y, df_merged, district_encoder, neighborhood_encoder = model.load_gender_model()
 
-    # # User-friendly age selection
-    # age = st.slider('Select Your Age', min_value=0, max_value=100, value=25)
-    # age_group_quinquennial = age // 5  # Mapping age to quinquennial group
+        # Save df_merged for later use
+        df_merged.to_csv('datasets/merged_gender_data.csv', index=False)
 
-    # if st.button('Predict Gender'):
-    #     prediction = model.predict([[encoded_district, age_group_quinquennial]])
-    #     predicted_gender = 'Male' if prediction[0] == 1 else 'Female'
-    #     st.success(f'Predicted Gender: {predicted_gender}')
-
-    X, y, df_merged, district_encoder, neighborhood_encoder = load_and_prepare_data_2()
-    model = train_model(X, y)
-    st.header("Gender Prediction based on District, Neighborhood, Age, and Education Level")
+        gender_model = model.train_gender_model(X, y)
+        model.save_gender_models_and_encoders(gender_model, district_encoder, neighborhood_encoder)
+    st.header(translations.translate('prediction_gender'))
 
     # District selection
     district_options = district_encoder.classes_
-    selected_district = st.selectbox('Select District', district_options)
+    selected_district = st.selectbox(translations.translate('district'), district_options)
 
     # Neighborhood selection based on district
     filtered_neighborhoods = df_merged[df_merged['Nom_Districte'] == selected_district]['Nom_Barri'].unique()
-    selected_neighborhood = st.selectbox('Select Neighborhood', filtered_neighborhoods)
+    selected_neighborhood = st.selectbox(translations.translate('neighborhood'), filtered_neighborhoods)
 
     # Age selection
-    age = st.number_input('Enter Your Age', min_value=0, max_value=100, value=25)
+    age = st.number_input(translations.translate('age'), min_value=0, max_value=100, value=25)
     age_group = age // 5  # Mapping age to quinquennial group
 
     # Education level selection
-    education_levels = {
-        'Sin estudios': 1,
-        'Estudios primarios, certificado de escolaridad, EGB': 2,
-        'Bachillerato elemental, graduado escolar, ESO, FPI': 3,
-        'Bachillerato superior, BUP, COU, FPII, CFGM grado medio': 4,
-        'Estudios universitarios, CFGS grado superior': 5
-    }
-    selected_education = st.selectbox('Select Education Level', list(education_levels.keys()))
+    education_options = [
+        (0, translations.translate('select')),
+        (1, translations.translate('education_1')),
+        (2, translations.translate('education_2')),
+        (3, translations.translate('education_3')),
+        (4, translations.translate('education_4')),
+        (5, translations.translate('education_5'))]
+    # Education level selection for gender prediction
+    selected_education_gender = st.selectbox(translations.translate('education'), education_options, format_func=lambda x: x[1], key="education_select_gender")
 
     # Encoding user inputs
     encoded_district = district_encoder.transform([selected_district])[0]
     encoded_neighborhood = neighborhood_encoder.transform([selected_neighborhood])[0]
+    selected_education_int = int(selected_education_gender[0])
 
-    if st.button('Predict Gender'):
-        prediction = model.predict([[encoded_district, encoded_neighborhood, age_group, education_levels[selected_education]]])
-        predicted_gender = 'Male' if prediction[0] == 1 else 'Female'
-        st.success(f'Predicted Gender: {predicted_gender}')
+    if st.button(translations.translate('predict')):
+        prediction = gender_model.predict([[encoded_district, encoded_neighborhood, age_group, selected_education_int]])
+        predicted_gender = translations.translate('male') if prediction[0] == 1 else translations.translate('female')
+        st.success(f'{translations.translate("predicted_gender")} {predicted_gender}')
+
+    # Predict lifespan
+    if os.path.exists('lifespan_models.pkl') and os.path.exists('lifespan_district_encoder.pkl') and os.path.exists('lifespan_neighborhood_encoder.pkl'):
+        models, district_encoder, neighborhood_encoder = model.load_lifespan_models_and_encoders()
+    else:
+        X, df_merged, district_encoder, neighborhood_encoder = model.load_lifespan_model()
+        models = model.train_lifespan_models(X, df_merged)
+        model.save_lifespan_models_and_encoders(models, district_encoder, neighborhood_encoder)
+    st.header("Life Expectancy Prediction")
+
+    # Gender selection
+    gender_options = {
+        'Male': 2,
+        'Female': 1
+    }
+    selected_gender = st.selectbox("Gènere", list(gender_options.keys()))
+    encoded_gender = gender_options[selected_gender]
+
+    # District selection
+    district_options = district_encoder.classes_
+    selected_district = st.selectbox("Districte", district_options)
+
+    # Neighborhood selection based on district
+    filtered_neighborhoods = df_merged[df_merged['Nom_Districte'] == selected_district]['Nom_Barri'].unique()
+    selected_neighborhood = st.selectbox("Barri", filtered_neighborhoods)
+
+    # Age selection
+    age = st.number_input("Edat", min_value=0, max_value=100, value=25)
+    age_group = age // 5  # Mapping age to quinquennial group
+
+    # Education level selection
+    education_options = [
+        (0, translations.translate('select')),
+        (1, translations.translate('education_1')),
+        (2, translations.translate('education_2')),
+        (3, translations.translate('education_3')),
+        (4, translations.translate('education_4')),
+        (5, translations.translate('education_5'))]
+    selected_education_lifespan = st.selectbox(translations.translate('education'), education_options, format_func=lambda x: x[1], key="education_select_lifespan")
+
+    # Encoding user inputs
+    encoded_district = district_encoder.transform([selected_district])[0]
+    encoded_neighborhood = neighborhood_encoder.transform([selected_neighborhood])[0]
+    selected_education_int = int(selected_education_lifespan[0])
+
+    if st.button(translations.translate('predict'), key="predict_lifespan"):
+        input_features = [encoded_district, encoded_neighborhood, selected_education_int, encoded_gender]
+        predicted_age_group_min, predicted_age_group_max = model.predict_lifespan(models, input_features)
+        st.success(f"Predicted Age Range: {predicted_age_group_min}-{predicted_age_group_max} years")
+
+
 
     # Custom styles for charts
     sns.set(style="whitegrid")
@@ -326,12 +314,6 @@ with tab2:
         tooltip=['Nom_Barri', 'Population']
     ).interactive()
     st.altair_chart(bar_chart, use_container_width=True)
-
-    # 2. Gender Distribution Across Districts
-    selected_district_gender = st.selectbox(translations.translate('district_gender'), df_1['Nom_Districte'].unique(), key='district_gender')
-    gender_distribution = df_1[df_1['Nom_Districte'] == selected_district_gender].groupby('SEXE').size().reset_index(name='Count')
-    gender_distribution['Gender'] = gender_distribution['SEXE'].map({1: 'Female', 2: 'Male'})
-    st.bar_chart(gender_distribution.set_index('Gender')['Count'])
 
     # 3. Age Distribution in Neighborhoods
     st.subheader("Age Distribution in Neighborhoods")
