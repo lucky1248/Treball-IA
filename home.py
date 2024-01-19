@@ -332,57 +332,64 @@ with tab2:
     sns.set(style="whitegrid")
 
     # 1. Population Distribution by District and Neighborhood
-    st.header("Population Distribution")
+    st.header(translations.translate('population_distribution'))
     col1, col2 = st.columns(2)
     with col1:
         selected_district = st.selectbox(translations.translate('select_district'), df_1['Nom_Districte'].unique())
 
     population_district = df_1[df_1['Nom_Districte'] == selected_district].groupby('Nom_Barri').size().reset_index(name='Population')
     bar_chart = altair.Chart(population_district).mark_bar().encode(
-        x='Nom_Barri:N',
-        y='Population:Q',
+        x=altair.X('Nom_Barri:N', title=translations.translate('neighborhood_name')),
+        y=altair.Y('Population:Q', title=translations.translate('population')),
         color='Nom_Barri:N',
-        tooltip=['Nom_Barri', 'Population']
+        tooltip=[altair.Tooltip('Nom_Barri:N', title=translations.translate('neighborhood_name')), 
+                altair.Tooltip('Population:Q', title=translations.translate('population'))]
     ).interactive()
+
     st.altair_chart(bar_chart, use_container_width=True)
 
-    # 3. Age Distribution in Neighborhoods
-    st.subheader("Age Distribution in Neighborhoods")
-    district_selected = st.selectbox('Select District', df_1['Nom_Districte'].unique(), key='district_age')
-    neighborhood_selected = st.selectbox('Select Neighborhood', df_1[df_1['Nom_Districte'] == district_selected]['Nom_Barri'].unique(), key='neighborhood_age')
-    age_distribution = df_1[(df_1['Nom_Districte'] == district_selected) & (df_1['Nom_Barri'] == neighborhood_selected)]['EDAT_1'].value_counts().sort_index()
-    st.bar_chart(age_distribution)
-
-    # 4. Comparison of Age Groups between Two Districts
-    st.subheader("Comparison of Age Groups between Two Districts")
-    district1 = st.selectbox('Select First District', df_1['Nom_Districte'].unique(), key='first_district')
-    district2 = st.selectbox('Select Second District', df_1['Nom_Districte'].unique(), key='second_district')
-    age_group_comparison = pd.DataFrame({
-        district1: df_1[df_1['Nom_Districte'] == district1]['EDAT_1'].value_counts().sort_index(),
-        district2: df_1[df_1['Nom_Districte'] == district2]['EDAT_1'].value_counts().sort_index()
-    })
-    st.bar_chart(age_group_comparison)
-
-    # 5. Aggregated Data by Gender and Age Group
-    st.subheader("Aggregated Data by Gender and Age Group")
-    min_age, max_age = st.slider("Select Age Range", 0, 100, (0, 100), key='age_range')
-    df_1['Gender'] = df_1['SEXE'].map({1: 'Female', 2: 'Male'})  # Map gender values
-    age_gender_aggregation = df_1[(df_1['EDAT_1'] >= min_age) & (df_1['EDAT_1'] <= max_age)].groupby(['Gender', pd.cut(df_1['EDAT_1'], bins=[0, 18, 35, 60, 100], labels=['0-18', '19-35', '36-60', '60+'])]).size().unstack().fillna(0)
-    st.table(age_gender_aggregation)
-
-    # 7. Statistical Summary of Each Neighborhood
-    st.subheader("Statistical Summary of Each Neighborhood")
-    district_stat = st.selectbox('Select District for Statistics', df_1['Nom_Districte'].unique(), key='district_stat')
-    neighborhood_stat = st.selectbox('Select Neighborhood for Statistics', df_1[df_1['Nom_Districte'] == district_stat]['Nom_Barri'].unique(), key='neighborhood_stat')
+    # 3. Statistical Summary of Each Neighborhood
+    st.subheader(translations.translate('statistical_summary_for_each_neighborhood'))
+    district_stat = st.selectbox(translations.translate('select_district'), df_1['Nom_Districte'].unique(), key='district_stat')
+    neighborhood_stat = st.selectbox(translations.translate('select_neighborhood'), df_1[df_1['Nom_Districte'] == district_stat]['Nom_Barri'].unique(), key='neighborhood_stat')
     summary_stats = df_1[(df_1['Nom_Districte'] == district_stat) & (df_1['Nom_Barri'] == neighborhood_stat)]['EDAT_1'].describe()
 
-    # Enhancing the display of statistical summary
-    st.markdown("#### Summary Statistics")
-    st.markdown(f"**Mean Age:** {summary_stats['mean']:.2f} years")
-    st.markdown(f"**Median Age:** {summary_stats['50%']:.2f} years")
-    st.markdown(f"**Standard Deviation:** {summary_stats['std']:.2f} years")
-    st.markdown(f"**Minimum Age:** {summary_stats['min']:.0f} years")
-    st.markdown(f"**Maximum Age:** {summary_stats['max']:.0f} years")
-    st.markdown(f"**25th Percentile Age:** {summary_stats['25%']:.2f} years")
-    st.markdown(f"**75th Percentile Age:** {summary_stats['75%']:.2f} years")
-    st.markdown(f"**Count:** {summary_stats['count']:.0f} individuals")
+    st.markdown(f"""
+        <style>
+        .stats-card {{
+            background-color: #f8f9fa;
+            border-left: 5px solid #2a9d8f;
+            padding: 15px;
+            margin: 5px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }}
+        .stats-card h4 {{
+            color: #495057;
+            font-size: 1.2em; /* Smaller font size for the title */
+            margin-bottom: 10px;
+        }}
+        .stats-card p {{
+            color: #495057;
+            font-size: 1em; /* Smaller font size for the content */
+            margin: 3px 0; /* Less space between lines */
+        }}
+        .stats-card p strong {{
+            display: block;
+            color: #212529;
+            font-size: 1.1em; /* Slightly larger font size for the key terms */
+            margin-bottom: 3px; /* Less space below key terms */
+        }}
+        </style>
+        <div class="stats-card">
+            <h4>{translations.translate('summary_statistics')}</h4>
+            <p><strong>{translations.translate('mean_age')}:</strong> {summary_stats['mean']:.2f} {translations.translate('years')}</p>
+            <p><strong>{translations.translate('median_age')}:</strong> {summary_stats['50%']:.2f} {translations.translate('years')}</p>
+            <p><strong>{translations.translate('standard_deviation')}:</strong> {summary_stats['std']:.2f} {translations.translate('years')}</p>
+            <p><strong>{translations.translate('minimum_age')}:</strong> {summary_stats['min']:.0f} {translations.translate('years')}</p>
+            <p><strong>{translations.translate('maximum_age')}:</strong> {summary_stats['max']:.0f} {translations.translate('years')}</p>
+            <p><strong>{translations.translate('percentile_25')}:</strong> {summary_stats['25%']:.2f} {translations.translate('years')}</p>
+            <p><strong>{translations.translate('percentile_75')}:</strong> {summary_stats['75%']:.2f} {translations.translate('years')}</p>
+            <p><strong>{translations.translate('count')}:</strong> {summary_stats['count']:.0f} {translations.translate('individuals')}</p>
+        </div>
+        """, unsafe_allow_html=True)
